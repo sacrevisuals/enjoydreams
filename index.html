@@ -527,33 +527,41 @@ Cidade - Estado
           // Preparar linhas com LOTE PROMOCIONAL fixo
           const preparedLines = [];
 
-          // Processar as linhas do usuário
+          // Processar apenas as duas primeiras linhas do usuário (nome e cidade)
+          let userLineCount = 0;
           lines.forEach((line, index) => {
+            if (line.trim() === "") return; // Ignorar linhas vazias
+
             let finalText = line.toUpperCase();
 
-            // Limitar primeira linha a 2 nomes
-            if (index === 0) {
+            // Primeira linha: Nome (limitar a 2 palavras)
+            if (userLineCount === 0) {
               const words = finalText.split(" ");
               if (words.length > 2) {
                 finalText = words.slice(0, 2).join(" ");
               }
+              preparedLines.push({ text: finalText, isPhone: false });
+            }
+            // Segunda linha: Cidade
+            else if (userLineCount === 1) {
+              preparedLines.push({ text: finalText, isPhone: false });
+            }
+            // Terceira linha: Telefone
+            else if (userLineCount === 2) {
+              const isPhone = /\(?\d{2}\)?\s?\d{4,5}[-\s]?\d{4}/.test(line);
+              // Adicionar LOTE e VALOR antes do telefone
+              preparedLines.push({ text: "LOTE PROMOCIONAL", isPhone: false });
+              preparedLines.push({ text: "R$ 40,00", isPhone: false });
+              preparedLines.push({ text: finalText, isPhone: isPhone });
             }
 
-            // Detectar se é telefone
-            const isPhone = /\(?\d{2}\)?\s?\d{4,5}[-\s]?\d{4}/.test(line);
-
-            preparedLines.push({ text: finalText, isPhone });
+            userLineCount++;
           });
 
-          // Inserir LOTE PROMOCIONAL e valor fixo antes do telefone
-          if (preparedLines.length >= 2) {
-            // Inserir depois da cidade (posição 2)
-            preparedLines.splice(
-              2,
-              0,
-              { text: "LOTE PROMOCIONAL", isPhone: false },
-              { text: "R$ 40,00", isPhone: false }
-            );
+          // Se o usuário não colocou telefone, adicionar LOTE e VALOR no final
+          if (userLineCount === 2) {
+            preparedLines.push({ text: "LOTE PROMOCIONAL", isPhone: false });
+            preparedLines.push({ text: "R$ 40,00", isPhone: false });
           }
 
           // Calcular tamanho de fonte ótimo para cada linha
