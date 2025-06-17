@@ -227,6 +227,16 @@
         display: none;
       }
 
+      .lote-info {
+        background: #f3e5f5;
+        color: #764ba2;
+        padding: 10px 15px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        text-align: center;
+        font-weight: bold;
+      }
+
       @media (max-width: 480px) {
         .container {
           padding: 20px;
@@ -267,11 +277,11 @@
 
       <div class="form-section">
         <h3>📝 2. Preencha suas informações</h3>
+        <div class="lote-info">🎫 LOTE PROMOCIONAL - R$ 40,00</div>
         <textarea
           id="infoText"
           placeholder="Nome Sobrenome
 Cidade - Estado
-R$ 150,00
 (11) 99999-9999"
           maxlength="200"
         ></textarea>
@@ -514,8 +524,11 @@ R$ 150,00
 
           const lines = text.split("\n").map((line) => line.trim());
 
-          // Preparar linhas
-          const preparedLines = lines.map((line, index) => {
+          // Preparar linhas com LOTE PROMOCIONAL fixo
+          const preparedLines = [];
+
+          // Processar as linhas do usuário
+          lines.forEach((line, index) => {
             let finalText = line.toUpperCase();
 
             // Limitar primeira linha a 2 nomes
@@ -526,16 +539,22 @@ R$ 150,00
               }
             }
 
-            // Adicionar R$ se necessário
-            if (/^\d+([.,]\d{2})?$/.test(line)) {
-              finalText = "R$ " + finalText;
-            }
-
             // Detectar se é telefone
             const isPhone = /\(?\d{2}\)?\s?\d{4,5}[-\s]?\d{4}/.test(line);
 
-            return { text: finalText, isPhone };
+            preparedLines.push({ text: finalText, isPhone });
           });
+
+          // Inserir LOTE PROMOCIONAL e valor fixo antes do telefone
+          if (preparedLines.length >= 2) {
+            // Inserir depois da cidade (posição 2)
+            preparedLines.splice(
+              2,
+              0,
+              { text: "LOTE PROMOCIONAL", isPhone: false },
+              { text: "R$ 40,00", isPhone: false }
+            );
+          }
 
           // Calcular tamanho de fonte ótimo para cada linha
           const fontSizes = preparedLines.map((lineInfo) => {
