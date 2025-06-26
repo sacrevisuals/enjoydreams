@@ -277,7 +277,7 @@
 
       <div class="form-section">
         <h3>📝 2. Preencha suas informações</h3>
-        <div class="lote-info">🎫 LOTE PROMOCIONAL - R$ 40,00</div>
+        <div class="lote-info">🎫 1º LOTE - R$ 50,00</div>
         <textarea
           id="infoText"
           placeholder="Nome Sobrenome
@@ -310,6 +310,10 @@ Cidade - Estado
       // Configurações do template
       const TEMPLATE_PATH = "assets/images/mockup-enjoy-dreams.png";
       const WHATSAPP_ICON_PATH = "assets/images/whatsapp_icon.png";
+
+      // Configurações de LOTE (para facilitar futuras mudanças)
+      const LOTE_NOME = "1º LOTE";
+      const LOTE_VALOR = "R$ 50,00";
 
       // Configurações da FOTO
       const PHOTO_CENTER_X = 540;
@@ -550,8 +554,8 @@ Cidade - Estado
             else if (userLineCount === 2) {
               const isPhone = /\(?\d{2}\)?\s?\d{4,5}[-\s]?\d{4}/.test(line);
               // Adicionar LOTE e VALOR antes do telefone
-              preparedLines.push({ text: "LOTE PROMOCIONAL", isPhone: false });
-              preparedLines.push({ text: "R$ 40,00", isPhone: false });
+              preparedLines.push({ text: LOTE_NOME, isPhone: false });
+              preparedLines.push({ text: LOTE_VALOR, isPhone: false });
               preparedLines.push({ text: finalText, isPhone: isPhone });
             }
 
@@ -560,8 +564,8 @@ Cidade - Estado
 
           // Se o usuário não colocou telefone, adicionar LOTE e VALOR no final
           if (userLineCount === 2) {
-            preparedLines.push({ text: "LOTE PROMOCIONAL", isPhone: false });
-            preparedLines.push({ text: "R$ 40,00", isPhone: false });
+            preparedLines.push({ text: LOTE_NOME, isPhone: false });
+            preparedLines.push({ text: LOTE_VALOR, isPhone: false });
           }
 
           // Calcular tamanho de fonte ótimo para cada linha
