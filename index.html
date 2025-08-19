@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Enjoy Dreams - Promoter ou Excursionista Oficial</title>
+    <style>
+      /* Importar fonte Druk Wide Bold */
+      @font-face {
+        font-family: "Druk Wide Bold Bold";
+        font-style: normal;
+        font-weight: normal;
+        src: local("Druk Wide Bold Bold"),
+          url("assets/fonts/DrukWideBold.woff") format("woff");
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Arial, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .container {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        max-width: 600px;
+        width: 100%;
+      }
+
+      h1 {
+        color: #764ba2;
+        text-align: center;
+        margin-bottom: 10px;
+        font-size: 28px;
+      }
+
+      .subtitle {
+        text-align: center;
+        color: #666;
+        margin-bottom: 20px;
+        font-size: 16px;
+      }
+
+      .font-test {
+        font-family: "Druk Wide Bold Bold", Arial Black, sans-serif;
+        font-weight: normal;
+        color: #764ba2;
+        text-align: center;
+        font-size: 24px;
+        margin-bottom: 20px;
+        letter-spacing: 0.2em;
+      }
+
+      .privacy-note {
+        background: #e8f5e9;
+        color: #2e7d32;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        font-size: 14px;
+        text-align: center;
+      }
+
+      .privacy-note strong {
+        font-size: 16px;
+      }
+
+      .form-section {
+        margin-bottom: 25px;
+      }
+
+      .form-section h3 {
+        color: #764ba2;
+        margin-bottom: 10px;
+        font-size: 18px;
+      }
+
+      .upload-area {
+        border: 3px dashed #764ba2;
+        border-radius: 15px;
+        padding: 40px 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: #f8f9fa;
+        margin-bottom: 20px;
+      }
+
+      .upload-area:hover {
+        background: #e9ecef;
+        border-color: #667eea;
+      }
+
+      .upload-area.dragover {
+        background: #e3e7ff;
+        border-color: #667eea;
+      }
+
+      .upload-icon {
+        font-size: 48px;
+        color: #764ba2;
+        margin-bottom: 10px;
+      }
+
+      .upload-text {
+        color: #764ba2;
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      .upload-subtext {
+        color: #666;
+        font-size: 14px;
+      }
+
+      input[type="file"] {
+        display: none;
+      }
+
+      textarea {
+        width: 100%;
+        padding: 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 16px;
+        resize: vertical;
+        min-height: 120px;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Arial, sans-serif;
+        transition: border-color 0.3s ease;
+      }
+
+      textarea:focus {
+        outline: none;
+        border-color: #764ba2;
+      }
+
+      .info-text {
+        font-size: 14px;
+        color: #666;
+        margin-top: 5px;
+      }
+
+      #preview {
+        text-align: center;
+        margin-bottom: 20px;
+        display: none;
+      }
+
+      #resultCanvas {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        margin-bottom: 20px;
+      }
+
+      .button {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        font-size: 18px;
+        font-weight: bold;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-block;
+        text-decoration: none;
+        margin: 0 10px;
+        width: 100%;
+        margin-bottom: 10px;
+      }
+
+      .button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      }
+
+      .button:active {
+        transform: translateY(0);
+      }
+
+      .button:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .button-secondary {
+        background: #6c757d;
+      }
+
+      .buttons {
+        text-align: center;
+        display: none;
+      }
+
+      .loading {
+        display: none;
+        text-align: center;
+        padding: 20px;
+        color: #764ba2;
+        font-size: 18px;
+      }
+
+      .error {
+        background: #fee;
+        color: #c33;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        display: none;
+      }
+
+      .lote-info {
+        background: #f3e5f5;
+        color: #764ba2;
+        padding: 10px 15px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        text-align: center;
+        font-weight: bold;
+      }
+
+      @media (max-width: 480px) {
+        .container {
+          padding: 20px;
+        }
+
+        h1 {
+          font-size: 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🎉 Enjoy Dreams 2025</h1>
+      <p class="subtitle">
+        Crie sua arte de Promoter ou Excursionista Oficial em segundos!
+      </p>
+
+      <div class="font-test">TESTE DA FONTE DRUK</div>
+
+      <div class="privacy-note">
+        <strong>🔒 100% Seguro</strong><br />
+        Suas fotos são processadas apenas no seu navegador.<br />
+        Nenhuma imagem é enviada ou armazenada!
+      </div>
+
+      <div class="error" id="error"></div>
+
+      <div class="form-section">
+        <h3>📸 1. Envie sua foto</h3>
+        <div class="upload-area" id="uploadArea">
+          <div class="upload-icon">📸</div>
+          <div class="upload-text">Clique ou arraste sua foto aqui</div>
+          <div class="upload-subtext">Formatos aceitos: JPG, PNG, WEBP</div>
+        </div>
+        <input type="file" id="fileInput" accept="image/*" />
+      </div>
+
+      <div class="form-section">
+        <h3>📝 2. Preencha suas informações</h3>
+        <div class="lote-info">🎫 2º LOTE - R$ 60,00</div>
+        <textarea
+          id="infoText"
+          placeholder="Nome Sobrenome
+Cidade - Estado
+(11) 99999-9999"
+          maxlength="200"
+        ></textarea>
+        <p class="info-text">
+          Digite uma informação por linha (máx. 2 nomes na primeira linha)
+        </p>
+      </div>
+
+      <button class="button" id="generateBtn" disabled>🎨 Gerar Arte</button>
+
+      <div class="loading" id="loading">Processando sua arte...</div>
+
+      <div id="preview">
+        <canvas id="resultCanvas"></canvas>
+      </div>
+
+      <div class="buttons" id="buttons">
+        <button class="button" id="downloadBtn">💾 Baixar Arte</button>
+        <button class="button button-secondary" id="newArtBtn">
+          🎨 Criar Nova Arte
+        </button>
+      </div>
+    </div>
+
+    <script>
+      // Configurações do template
+      const TEMPLATE_PATH = "assets/images/mockup-enjoy-dreams.png";
+      const WHATSAPP_ICON_PATH = "assets/images/whatsapp_icon.png";
+
+      // Configurações de LOTE (para facilitar futuras mudanças)
+      const LOTE_NOME = "2º LOTE";
+      const LOTE_VALOR = "R$ 60,00";
+
+      // Configurações da FOTO
+      const PHOTO_CENTER_X = 540;
+      const PHOTO_CENTER_Y = 744;
+      const PHOTO_RADIUS = 260;
+
+      // Configurações do TEXTO
+      const TEXT_CENTER_X = 560;
+      const TEXT_Y = 1300;
+      const TEXT_COLOR = "#e4c76d";
+      const TEXT_FONT = "Druk Wide Bold Bold";
+      const TEXT_CONTAINER_WIDTH = 850; // Largura máxima do container de texto (reduzida)
+      const TEXT_CONTAINER_HEIGHT = 383; // Altura do container
+      const MIN_FONT_SIZE = 25; // Tamanho mínimo da fonte
+      const MAX_FONT_SIZE = 40; // Tamanho máximo da fonte
+      const BASE_FONT_SIZE = 35; // Tamanho base
+      const LINE_HEIGHT_RATIO = 1.8; // Proporção altura da linha
+      const LETTER_SPACING_RATIO = 0.25; // Proporção do espaçamento
+
+      // Elementos do DOM
+      const uploadArea = document.getElementById("uploadArea");
+      const fileInput = document.getElementById("fileInput");
+      const infoText = document.getElementById("infoText");
+      const generateBtn = document.getElementById("generateBtn");
+      const preview = document.getElementById("preview");
+      const canvas = document.getElementById("resultCanvas");
+      const ctx = canvas.getContext("2d", { alpha: true });
+      const loading = document.getElementById("loading");
+      const buttons = document.getElementById("buttons");
+      const error = document.getElementById("error");
+
+      let templateImg = null;
+      let userImage = null;
+      let whatsappIcon = null;
+
+      // Carregar recursos ao iniciar
+      window.addEventListener("load", () => {
+        // Carregar template
+        templateImg = new Image();
+        templateImg.onload = () => {
+          console.log("Template carregado com sucesso!");
+        };
+        templateImg.onerror = () => {
+          showError(
+            "Erro ao carregar o template. Verifique se o arquivo está na pasta correta."
+          );
+        };
+        templateImg.src = TEMPLATE_PATH;
+
+        // Carregar ícone do WhatsApp
+        whatsappIcon = new Image();
+        whatsappIcon.onload = () => {
+          console.log("Ícone do WhatsApp carregado!");
+        };
+        whatsappIcon.onerror = () => {
+          console.log(
+            "Ícone do WhatsApp não encontrado - continuando sem ícone"
+          );
+        };
+        whatsappIcon.src = WHATSAPP_ICON_PATH;
+      });
+
+      // Eventos de upload
+      uploadArea.addEventListener("click", () => fileInput.click());
+
+      uploadArea.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        uploadArea.classList.add("dragover");
+      });
+
+      uploadArea.addEventListener("dragleave", () => {
+        uploadArea.classList.remove("dragover");
+      });
+
+      uploadArea.addEventListener("drop", (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove("dragover");
+
+        const file = e.dataTransfer.files[0];
+        if (file && file.type.startsWith("image/")) {
+          handleImageUpload(file);
+        }
+      });
+
+      fileInput.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          handleImageUpload(file);
+        }
+      });
+
+      // Habilitar botão quando houver imagem
+      function checkCanGenerate() {
+        generateBtn.disabled = !userImage;
+      }
+
+      function showError(message) {
+        error.textContent = message;
+        error.style.display = "block";
+        setTimeout(() => {
+          error.style.display = "none";
+        }, 5000);
+      }
+
+      function handleImageUpload(file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            userImage = img;
+            uploadArea.innerHTML =
+              '<div class="upload-icon">✅</div><div class="upload-text">Foto carregada!</div><div class="upload-subtext">Clique para trocar</div>';
+            checkCanGenerate();
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+
+      // Função para calcular o melhor tamanho de fonte para cada linha
+      function calculateOptimalFontSize(ctx, text, maxWidth, baseSize) {
+        let fontSize = baseSize;
+        const spacedText = text.split("").join(" "); // Adicionar espaços entre letras
+
+        // Margem de segurança de 10% para garantir que não vaze
+        const safeWidth = maxWidth * 0.85;
+
+        ctx.font = `${fontSize}px "${TEXT_FONT}", Arial Black, sans-serif`;
+        let textWidth = ctx.measureText(spacedText).width;
+
+        // Reduzir fonte até caber com folga
+        while (textWidth > safeWidth && fontSize > MIN_FONT_SIZE) {
+          fontSize -= 1;
+          ctx.font = `${fontSize}px "${TEXT_FONT}", Arial Black, sans-serif`;
+          textWidth = ctx.measureText(spacedText).width;
+        }
+
+        // Só aumentar se tiver MUITO espaço sobrando (texto muito curto)
+        while (textWidth < safeWidth * 0.6 && fontSize < MAX_FONT_SIZE) {
+          const testSize = fontSize + 1;
+          ctx.font = `${testSize}px "${TEXT_FONT}", Arial Black, sans-serif`;
+          const testWidth = ctx.measureText(spacedText).width;
+
+          // Se ainda couber com folga, aumentar
+          if (testWidth < safeWidth) {
+            fontSize = testSize;
+            textWidth = testWidth;
+          } else {
+            break;
+          }
+        }
+
+        return fontSize;
+      }
+
+      // Gerar arte
+      generateBtn.addEventListener("click", () => {
+        if (!userImage || !templateImg) return;
+
+        loading.style.display = "block";
+        generateBtn.style.display = "none";
+
+        // Configurar canvas
+        canvas.width = 1080;
+        canvas.height = 1920;
+
+        // Limpar canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = "high";
+
+        // Calcular crop da imagem do usuário
+        let srcX = 0,
+          srcY = 0,
+          srcSize = Math.min(userImage.width, userImage.height);
+
+        if (userImage.width > userImage.height) {
+          srcX = (userImage.width - userImage.height) / 2;
+        } else {
+          srcY = (userImage.height - userImage.width) / 2;
+        }
+
+        // Desenhar foto do usuário no círculo
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(PHOTO_CENTER_X, PHOTO_CENTER_Y, PHOTO_RADIUS, 0, Math.PI * 2);
+        ctx.clip();
+
+        ctx.drawImage(
+          userImage,
+          srcX,
+          srcY,
+          srcSize,
+          srcSize,
+          PHOTO_CENTER_X - PHOTO_RADIUS,
+          PHOTO_CENTER_Y - PHOTO_RADIUS,
+          PHOTO_RADIUS * 2,
+          PHOTO_RADIUS * 2
+        );
+        ctx.restore();
+
+        // Desenhar template por cima
+        ctx.drawImage(templateImg, 0, 0);
+
+        // Adicionar texto com sistema auto-ajustável
+        const text = infoText.value.trim();
+        if (text) {
+          ctx.save();
+          ctx.fillStyle = TEXT_COLOR;
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+
+          const lines = text.split("\n").map((line) => line.trim());
+
+          // Preparar linhas com LOTE PROMOCIONAL fixo
+          const preparedLines = [];
+
+          // Processar apenas as duas primeiras linhas do usuário (nome e cidade)
+          let userLineCount = 0;
+          lines.forEach((line, index) => {
+            if (line.trim() === "") return; // Ignorar linhas vazias
+
+            let finalText = line.toUpperCase();
+
+            // Primeira linha: Nome (limitar a 2 palavras)
+            if (userLineCount === 0) {
+              const words = finalText.split(" ");
+              if (words.length > 2) {
+                finalText = words.slice(0, 2).join(" ");
+              }
+              preparedLines.push({ text: finalText, isPhone: false });
+            }
+            // Segunda linha: Cidade
+            else if (userLineCount === 1) {
+              preparedLines.push({ text: finalText, isPhone: false });
+            }
+            // Terceira linha: Telefone
+            else if (userLineCount === 2) {
+              const isPhone = /\(?\d{2}\)?\s?\d{4,5}[-\s]?\d{4}/.test(line);
+              // Adicionar LOTE e VALOR antes do telefone
+              preparedLines.push({ text: LOTE_NOME, isPhone: false });
+              preparedLines.push({ text: LOTE_VALOR, isPhone: false });
+              preparedLines.push({ text: finalText, isPhone: isPhone });
+            }
+
+            userLineCount++;
+          });
+
+          // Se o usuário não colocou telefone, adicionar LOTE e VALOR no final
+          if (userLineCount === 2) {
+            preparedLines.push({ text: LOTE_NOME, isPhone: false });
+            preparedLines.push({ text: LOTE_VALOR, isPhone: false });
+          }
+
+          // Calcular tamanho de fonte ótimo para cada linha
+          const fontSizes = preparedLines.map((lineInfo) => {
+            return calculateOptimalFontSize(
+              ctx,
+              lineInfo.text,
+              TEXT_CONTAINER_WIDTH * 0.9,
+              BASE_FONT_SIZE
+            );
+          });
+
+          // Calcular altura total com line heights proporcionais
+          const lineHeights = fontSizes.map((size) => size * LINE_HEIGHT_RATIO);
+          const totalHeight = lineHeights.reduce(
+            (sum, height) => sum + height,
+            0
+          );
+
+          // Posição inicial Y centralizada
+          let currentY = TEXT_Y + (TEXT_CONTAINER_HEIGHT - totalHeight) / 2;
+
+          // Desenhar cada linha
+          preparedLines.forEach((lineInfo, index) => {
+            const fontSize = fontSizes[index];
+            const lineHeight = lineHeights[index];
+
+            // Aplicar scale vertical
+            ctx.save();
+            ctx.translate(0, currentY + lineHeight / 2);
+            ctx.scale(1, 1.2);
+            ctx.translate(0, -(currentY + lineHeight / 2));
+
+            // Configurar fonte
+            ctx.font = `${fontSize}px "${TEXT_FONT}", Arial Black, sans-serif`;
+
+            // Adicionar espaços entre letras
+            const spacedText = lineInfo.text.split("").join(" ");
+
+            // Desenhar ícone do WhatsApp se for telefone
+            if (lineInfo.isPhone && whatsappIcon && whatsappIcon.complete) {
+              const iconSize = fontSize;
+              const textWidth = ctx.measureText(spacedText).width;
+              const iconX = TEXT_CENTER_X - textWidth / 2 - iconSize - 15;
+
+              ctx.save();
+              ctx.scale(1, 1 / 1.2); // Compensar scale vertical
+              const adjustedY = (currentY + lineHeight / 2) * 1.2;
+              ctx.drawImage(
+                whatsappIcon,
+                iconX,
+                adjustedY - iconSize / 2,
+                iconSize,
+                iconSize
+              );
+              ctx.restore();
+            }
+
+            // Desenhar texto
+            ctx.fillText(spacedText, TEXT_CENTER_X, currentY + lineHeight / 2);
+
+            ctx.restore();
+
+            // Próxima linha
+            currentY += lineHeight;
+          });
+
+          ctx.restore();
+        }
+
+        // Mostrar resultado
+        loading.style.display = "none";
+        preview.style.display = "block";
+        buttons.style.display = "block";
+      });
+
+      // Download
+      document.getElementById("downloadBtn").addEventListener("click", () => {
+        const link = document.createElement("a");
+        const date = new Date();
+        const timestamp = `${date.getFullYear()}${(date.getMonth() + 1)
+          .toString()
+          .padStart(2, "0")}${date.getDate().toString().padStart(2, "0")}_${date
+          .getHours()
+          .toString()
+          .padStart(2, "0")}${date.getMinutes().toString().padStart(2, "0")}`;
+        link.download = `enjoy-dreams-${timestamp}.png`;
+        link.href = canvas.toDataURL("image/png", 1.0);
+        link.click();
+      });
+
+      // Nova arte
+      document.getElementById("newArtBtn").addEventListener("click", () => {
+        fileInput.value = "";
+        infoText.value = "";
+        userImage = null;
+        uploadArea.innerHTML =
+          '<div class="upload-icon">📸</div><div class="upload-text">Clique ou arraste sua foto aqui</div><div class="upload-subtext">Formatos aceitos: JPG, PNG, WEBP</div>';
+        preview.style.display = "none";
+        buttons.style.display = "none";
+        generateBtn.style.display = "block";
+        generateBtn.disabled = true;
+      });
+    </script>
+  </body>
+</html>
